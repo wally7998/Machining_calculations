@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Milling Cutting Parameters Calculator</title>
+  <style>
+    body { font-family: sans-serif; max-width: 440px; margin: 40px auto; background: #f9f9f9; }
+    #container { background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 24px; }
+    label { display: block; margin: 12px 0 4px; }
+    input { width: 100%; padding: 6px; margin-bottom: 12px; }
+    button { width: 100%; padding: 10px; }
+    hr { margin: 24px 0; }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h2>Milling Cutting Parameters Calculator</h2>
+    <label>SFM (Surface Feet per Minute):
+      <input type="number" id="sfm" min="0" step="any">
+    </label>
+    <label>IPT (Inches Per Tooth):
+      <input type="number" id="ipt" min="0" step="any">
+    </label>
+    <label>Diameter (in):
+      <input type="number" id="diameter" min="0" step="any">
+    </label>
+    <label>Number of Teeth:
+      <input type="number" id="teeth" min="1" step="1" value="1">
+    </label>
+    <button onclick="calcMillingParams()">Calculate</button>
+    <hr>
+    <div>
+      <strong>RPM:</strong> <span id="rpm">-</span><br>
+      <strong>Feedrate (IPM):</strong> <span id="feedrate">-</span>
+    </div>
+  </div>
+  <script>
+    function calcMillingParams() {
+      var sfm = parseFloat(document.getElementById('sfm').value);
+      var ipt = parseFloat(document.getElementById('ipt').value);
+      var diameter = parseFloat(document.getElementById('diameter').value);
+      var teeth = parseInt(document.getElementById('teeth').value, 10);
+
+      var rpm = (diameter > 0 && !isNaN(sfm)) ? (3.82 * sfm) / diameter : 0;
+      var feedrate = (!isNaN(rpm) && !isNaN(ipt) && !isNaN(teeth)) ? rpm * teeth * ipt : 0;
+
+      document.getElementById('rpm').textContent = rpm > 0 ? Math.round(rpm) : '-';
+      document.getElementById('feedrate').textContent = feedrate > 0 ? feedrate.toFixed(2) : '-';
+    }
+  </script>
+</body>
+</html>
